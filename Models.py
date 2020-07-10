@@ -1,0 +1,92 @@
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import Column, String, Integer, Boolean, ForeignKey, Table
+from sqlalchemy.orm import relationship
+from sqlalchemy.ext.declarative import declarative_base
+Base = declarative_base()
+
+import json
+
+database_name = "Asky"
+database_path = "postgresql://{}:{}@{}/{}".format('postgres', '1','localhost:5432', database_name)
+
+db = SQLAlchemy()
+
+def setup_db(app, database_path=database_path):
+    app.config["SQLALCHEMY_DATABASE_URI"] = database_path
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    db.app = app
+    db.init_app(app)
+    db.create_all()
+
+
+class AbstractTable():
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+    
+    def update(self):
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+
+class QuestionReplys(db.Model, AbstractTable):
+    __tablename__ = "reply"
+
+    question_id = Column(Integer, primary_key = True)
+    reply_id  = Column(Integer, primary_key = True)
+
+
+class Follow(db.Model, AbstractTable):
+    __tablename__ = "follow"
+
+    follower = Column(Integer, primary_key = True)
+    followed = Column(Integer, primary_key = True)
+
+class User(db.Model, AbstractTable):
+    __tablename__ = "user"
+
+    id = Column(Integer, primary_key = True)
+    name = Column(String)
+    picture = Column(String)
+
+
+class Question(db.Model, AbstractTable):
+    __tablename__ = "question"
+
+    id = Column(Integer, primary_key = True)
+    content = Column(String, nullable=False)
+    answer = Column(String)
+    flag_answered = Column(Boolean, default = False)
+    reacts = Column(Integer, default = 0)
+
+    user_id = Column(Integer, ForeignKey("user.id"))
+    user = db.relationship("User", backref = "questions")
+
+class Asked(db.Model, AbstractTable):
+    user_id = Column(Integer, primary_key = True)
+    question_id = Column(Integer, primary_key = True)
+
+# class Notification(db.Model, AbstractTable):
+#     __tablename__ = "notification"
+
+#     id = Column(Integer, primary_key = True)
+#     content = Column(String)
+
+#     user_id = Column(Integer, ForeignKey("user.id"))
+#     user = db.relationship("User", backref = "notifications")
+
+class Report(db.Model, AbstractTable):
+    __tablename__ = "report"
+
+    id = Column(Integer, primary_key = True)
+
+    user_id = Column(Integer, ForeignKey("user.id"))
+    user = db.relationship("User", backref = "notifications")
+    question_id = Column(Integer, ForeignKey("question.id"))
+    # backref is not important
+    question = db.relationship("Question", backref = "report")
+
+
