@@ -30,6 +30,9 @@ class AbstractTable():
     def delete(self):
         db.session.delete(self)
         db.session.commit()
+    
+    def format(self):
+        pass
 
 
 class QuestionReplys(db.Model, AbstractTable):
@@ -45,12 +48,23 @@ class Follow(db.Model, AbstractTable):
     follower = Column(Integer, primary_key = True)
     followed = Column(Integer, primary_key = True)
 
+
+
 class User(db.Model, AbstractTable):
     __tablename__ = "user"
 
     id = Column(Integer, primary_key = True)
     name = Column(String)
     picture = Column(String)
+
+    def format(self):
+        return {
+            "id" : self.id,
+            "name" : self.name,
+            "picture" : self.picture
+        }
+
+
 
 
 class Question(db.Model, AbstractTable):
@@ -65,18 +79,21 @@ class Question(db.Model, AbstractTable):
     user_id = Column(Integer, ForeignKey("user.id"))
     user = db.relationship("User", backref = "questions")
 
+    def format(self):
+        return {
+            "id" : self.id,
+            "content" : self.content,
+            "answer" : self.answer,
+            "reacts" : self.reacts,
+            "user_id" : self.user_id,
+            "is_answered" : self.flag_answered
+        }
+
+
 class Asked(db.Model, AbstractTable):
     user_id = Column(Integer, primary_key = True)
     question_id = Column(Integer, primary_key = True)
 
-# class Notification(db.Model, AbstractTable):
-#     __tablename__ = "notification"
-
-#     id = Column(Integer, primary_key = True)
-#     content = Column(String)
-
-#     user_id = Column(Integer, ForeignKey("user.id"))
-#     user = db.relationship("User", backref = "notifications")
 
 class Report(db.Model, AbstractTable):
     __tablename__ = "report"
@@ -89,4 +106,10 @@ class Report(db.Model, AbstractTable):
     # backref is not important
     question = db.relationship("Question", backref = "report")
 
+    def format(self):
+        return {
+            "id" : self.id,
+            "user_id" : self.user_id,
+            "question_id" : self.question_id
+        }
 
