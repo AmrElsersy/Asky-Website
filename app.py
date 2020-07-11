@@ -5,35 +5,32 @@ import os
 import random
 import json
 from Models import *
-
-app = Flask(__name__)
-setup_db(app)
+from API import Resource_Questions, Resource_Users, Resource_Reports, Error_Handling
 
 
-@app.errorhandler(400)
-def bad_request(error):
-    return jsonify({
-        "success" : False,
-        "error" : 400,
-        "message" : "Error Bad Request, you may forgot to send the json"
-    }) , 400
+def create_app():
+    
+    app = Flask(__name__)
+    setup_db(app)
 
-@app.errorhandler(404)
-def not_found(error):
-    return jsonify({
-        "success" : False,
-        "error" : 404,
-        "message" : "Error Not Found"
-    }) , 404
+    CORS(app)
 
-@app.errorhandler(422)
-def unprocessable(error):
-    return jsonify({
-        "success" : False,
-        "error" : 422,
-        "message" : "Error Un Proccessable"
-    }) , 422
+    @app.after_request
+    def after_request(response):
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization,true')
+        response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+        return response
+
+    Error_Handling(app)
+    Resource_Questions(app)
+    Resource_Users(app)
+    Resource_Reports(app)
+
+    return app
+
+
+app = create_app()
 
 if __name__ == '__main__':
-  app.run(use_reloader=False)
+  app.run(use_reloader=False, debug=False)
 
