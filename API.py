@@ -21,16 +21,16 @@ def Resource_Questions(app):
     @app.route('/questions/<int:id>', methods=["DELETE"])
     def delete_question(id):
 
-        question = Question.query.filter(Question.id == id).all()[0]
+        question = Question.query.get(id)
 
         if question is None:
             abort(404)
         try:
 
             # delete the assignation of user to that question
-            users_asked_question = Asked.query.filter(Asked.question_id == question.id).all()[0]
+            users_asked_question = Asked.query.filter(Asked.question_id == question.id).all()
             if users_asked_question:
-                users_asked_question.delete()
+                users_asked_question[0].delete()
 
             # delete the assign of replys to that question
             replys = QuestionReplys.query.filter(
@@ -57,9 +57,9 @@ def Resource_Questions(app):
         if data is None:
             abort(400)
             
-        question = Question.query.filter(Question.id == id).all()[0]
+        question = Question.query.get(id)
 
-        if not question:
+        if question is None:
             abort(404)
 
         try:
@@ -73,6 +73,7 @@ def Resource_Questions(app):
 
             return jsonify ({
                 "success" : True,
+                "question" : question.format()
             }), 200
         except:
             abort(400)
@@ -107,7 +108,8 @@ def Resource_Questions(app):
                 Asked(user_id = data["asker_id"], question_id = new_reply.id).insert()
 
                 return jsonify({
-                    "success" : True
+                    "success" : True,
+                    "id" : new_reply.id
                 }),200
 
             else:
@@ -122,14 +124,17 @@ def Resource_Questions(app):
     @app.route('/questions/<int:id>/replys',  methods=["GET"])
     def get_replys(id):
         
+        q = Question.query.get(id)
+        if q is None:
+            abort(404)
+
         replys = QuestionReplys.query.filter(QuestionReplys.question_id == id).all()
 
         # get only the replys that get answered 
         question_replys = []
         for reply in replys:
             question = Question.query.get(reply.reply_id)
-            if question.flag_answered:
-                question_replys.append(question)
+            question_replys.append(question)
 
         return jsonify({
             "success" : True,
@@ -288,7 +293,8 @@ def Resource_Users(app):
             abort(404)
 
         if "id" in data:
-            Follow(follower = user.id, followed = data["id"]).insert()
+            if len( Follow.query.filter(Follow.followed == data['id']).all() ) == 0:
+                Follow(follower = user.id, followed = data["id"]).insert()
 
             return jsonify({
                 "success" : True,
@@ -321,10 +327,21 @@ def Resource_Reports(app):
 
         if "user_id" in data and "question_id" in data:
             
+            rr = Report.query.filter(Report.user_id == data["user_id"] and Report.question_id == data["question_id"]).all()
+            if len(rr) == 1:
+                print('xxxxxxxxxxxx')
+                return jsonify({
+                    "success" : True,
+                    "report" : rr[0].format()
+                }), 200
+
+            print('yyyyyyyyyyyyyyyy')
             new_report = Report(
                 user_id = data["user_id"],
                 question_id = data["question_id"]
             )
+            print(new_report)
+                
             new_report.insert()
             
             return jsonify({

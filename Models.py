@@ -79,6 +79,8 @@ class Question(db.Model, AbstractTable):
     user_id = Column(Integer, ForeignKey("user.id"))
     user = db.relationship("User", backref = "questions")
 
+
+
     def format(self):
         return {
             "id" : self.id,
@@ -89,6 +91,8 @@ class Question(db.Model, AbstractTable):
             "is_answered" : self.flag_answered
         }
 
+    def setID(self,id):
+        self.id = id
 
 class Asked(db.Model, AbstractTable):
     user_id = Column(Integer, primary_key = True)
@@ -113,3 +117,5 @@ class Report(db.Model, AbstractTable):
             "question_id" : self.question_id
         }
 
+    def setID(self,id):
+        self.id = id
