@@ -7,7 +7,7 @@ from flask import Flask, request, abort, jsonify
 def Resource_Questions(app):
     @app.route('/questions/<int:id>', methods=["GET"])
     @requires_auth("get:question")
-    def get_question(id):
+    def get_question(jwt, id):
         question = Question.query.get(id)
         print(question)
         
@@ -22,7 +22,7 @@ def Resource_Questions(app):
     # Admin Role
     @app.route('/questions/<int:id>', methods=["DELETE"])
     @requires_auth("delete:question")
-    def delete_question(id):
+    def delete_question(jwt, id):
 
         question = Question.query.get(id)
 
@@ -55,7 +55,7 @@ def Resource_Questions(app):
     # answer & react
     @app.route('/questions/<int:id>', methods=["PATCH"])
     @requires_auth("answer:question")
-    def answer_question(id):
+    def answer_question(jwt, id):
         data = request.get_json()
 
         if data is None:
@@ -85,7 +85,7 @@ def Resource_Questions(app):
     ####  Replys
     @requires_auth("answer:question")
     @app.route('/questions/<int:id>/replys',  methods=["POST"])
-    def add_reply(id):
+    def add_reply(jwt, id):
         data = request.get_json()
 
         if data is None:
@@ -128,7 +128,7 @@ def Resource_Questions(app):
     # get all replys of a question
     @app.route('/questions/<int:id>/replys',  methods=["GET"])
     @requires_auth("get:question")
-    def get_replys(id):
+    def get_replys(jwt, id):
         
         q = Question.query.get(id)
         if q is None:
@@ -151,8 +151,8 @@ def Resource_Questions(app):
 # ============= User ================
 def Resource_Users(app):
     @app.route('/users/<int:id>',  methods=["GET"])
-    @requires_auth("get:profile")
-    def get_user(id):
+    @requires_auth("get:user_info")
+    def get_user(jwt, id):
 
         user = User.query.get(id)
         if not user:
@@ -170,8 +170,8 @@ def Resource_Users(app):
         }), 200
 
     @app.route('/users/<int:id>',  methods=["PATCH"])
-    @requires_auth("edit:profile")
-    def edit_user(id):
+    @requires_auth("get:user_info")
+    def edit_user(jwt, id):
         data = request.get_json()
 
         if not data:
@@ -196,7 +196,7 @@ def Resource_Users(app):
 
     @app.route('/users/<int:id>/asked_questions',  methods=["GET"])
     @requires_auth("get:question")
-    def get_user_asked_questions(id):
+    def get_user_asked_questions(jwt, id):
 
         user = User.query.get(id)
         if not user:
@@ -219,7 +219,7 @@ def Resource_Users(app):
     ### Get My Questions to answer it or to show it to other users
     @app.route('/users/<int:id>/questions',  methods=["GET"])
     @requires_auth("get:question")
-    def get_user_questions(id):
+    def get_user_questions(jwt, id):
 
         user = User.query.get(id)
         if not user:
@@ -238,7 +238,7 @@ def Resource_Users(app):
     ### Add Question
     @app.route('/users/<int:id>/questions',  methods=["POST"])
     @requires_auth("ask:question")
-    def ask_question(id):
+    def ask_question(jwt, id):
         data = request.get_json()
 
         if not data:
@@ -271,9 +271,9 @@ def Resource_Users(app):
 
 
     # get the users that the user follow 
-    @app.route('/users/<int:idprofilefollowers', methods =["GET"])
-    @requires_auth("get:profile")
-    def get_followers(id):
+    @app.route('/users/<int:id>/followers', methods =["GET"])
+    @requires_auth("get:user_info")
+    def get_followers(jwt, id):
 
         user = User.query.get(id)
         if not user:
@@ -294,7 +294,7 @@ def Resource_Users(app):
     # follow someone 
     @app.route('/users/<int:id>/followers', methods =["POST"])
     @requires_auth("follow:profile")
-    def add_follower(id):
+    def add_follower(jwt, id):
 
         data = request.get_json()
 
@@ -322,7 +322,7 @@ def Resource_Reports(app):
     # Admin Role
     @app.route('/reports', methods= ["GET"])
     @requires_auth("get:report")
-    def get_all_reports():
+    def get_all_reports(jwt):
         # get all reports for the admin
         reports = Report.query.all()
 
@@ -334,7 +334,7 @@ def Resource_Reports(app):
     # User only Role
     @app.route('/reports', methods= ["POST"])
     @requires_auth("add:report")
-    def add_report_question():
+    def add_report_question(jwt):
 
         data = request.get_json()
         if not data:
@@ -369,7 +369,7 @@ def Resource_Reports(app):
     # Admin Role
     @app.route('/reports/<int:id>', methods= ["GET"])
     @requires_auth("get:report")
-    def get_report(id):
+    def get_report(jwt,id):
         report = Report.query.get(id)
         if not report:
             abort (404)
@@ -382,7 +382,7 @@ def Resource_Reports(app):
     # Admin Role
     @app.route('/reports/<int:id>', methods= ["DELETE"])
     @requires_auth("delete:report")
-    def delete_report(id):
+    def delete_report(jwt, id):
         report = Report.query.get(id)
         if not report:
             abort (404)

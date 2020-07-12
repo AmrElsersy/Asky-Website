@@ -5,6 +5,7 @@ import os
 import random
 import json
 from Models import *
+from auth import requires_auth
 from API import Resource_Questions, Resource_Users, Resource_Reports, Error_Handling
 
 
@@ -21,8 +22,9 @@ def create_app():
         response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
         return response
 
-    
+
     @app.route('/')
+    # @requires_auth()
     def home():
         return "Asky"
 
