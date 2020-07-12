@@ -21,6 +21,11 @@ def create_app():
         response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
         return response
 
+    
+    @app.route('/')
+    def home():
+        return "Asky"
+
     Error_Handling(app)
     Resource_Questions(app)
     Resource_Users(app)

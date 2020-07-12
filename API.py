@@ -1,10 +1,12 @@
 from Models import *
+from auth import *
 from flask import Flask, request, abort, jsonify
 
 # ======== Questions ==============
 
 def Resource_Questions(app):
     @app.route('/questions/<int:id>', methods=["GET"])
+    @requires_auth("get:question")
     def get_question(id):
         question = Question.query.get(id)
         print(question)
@@ -19,6 +21,7 @@ def Resource_Questions(app):
 
     # Admin Role
     @app.route('/questions/<int:id>', methods=["DELETE"])
+    @requires_auth("delete:question")
     def delete_question(id):
 
         question = Question.query.get(id)
@@ -51,6 +54,7 @@ def Resource_Questions(app):
 
     # answer & react
     @app.route('/questions/<int:id>', methods=["PATCH"])
+    @requires_auth("answer:question")
     def answer_question(id):
         data = request.get_json()
 
@@ -79,6 +83,7 @@ def Resource_Questions(app):
             abort(400)
 
     ####  Replys
+    @requires_auth("answer:question")
     @app.route('/questions/<int:id>/replys',  methods=["POST"])
     def add_reply(id):
         data = request.get_json()
@@ -122,6 +127,7 @@ def Resource_Questions(app):
 
     # get all replys of a question
     @app.route('/questions/<int:id>/replys',  methods=["GET"])
+    @requires_auth("get:question")
     def get_replys(id):
         
         q = Question.query.get(id)
@@ -145,6 +151,7 @@ def Resource_Questions(app):
 # ============= User ================
 def Resource_Users(app):
     @app.route('/users/<int:id>',  methods=["GET"])
+    @requires_auth("get:profile")
     def get_user(id):
 
         user = User.query.get(id)
@@ -163,6 +170,7 @@ def Resource_Users(app):
         }), 200
 
     @app.route('/users/<int:id>',  methods=["PATCH"])
+    @requires_auth("edit:profile")
     def edit_user(id):
         data = request.get_json()
 
@@ -187,6 +195,7 @@ def Resource_Users(app):
             abort(400) # bad request
 
     @app.route('/users/<int:id>/asked_questions',  methods=["GET"])
+    @requires_auth("get:question")
     def get_user_asked_questions(id):
 
         user = User.query.get(id)
@@ -209,6 +218,7 @@ def Resource_Users(app):
 
     ### Get My Questions to answer it or to show it to other users
     @app.route('/users/<int:id>/questions',  methods=["GET"])
+    @requires_auth("get:question")
     def get_user_questions(id):
 
         user = User.query.get(id)
@@ -227,6 +237,7 @@ def Resource_Users(app):
 
     ### Add Question
     @app.route('/users/<int:id>/questions',  methods=["POST"])
+    @requires_auth("ask:question")
     def ask_question(id):
         data = request.get_json()
 
@@ -260,7 +271,8 @@ def Resource_Users(app):
 
 
     # get the users that the user follow 
-    @app.route('/users/<int:id>/followers', methods =["GET"])
+    @app.route('/users/<int:idprofilefollowers', methods =["GET"])
+    @requires_auth("get:profile")
     def get_followers(id):
 
         user = User.query.get(id)
@@ -281,6 +293,7 @@ def Resource_Users(app):
 
     # follow someone 
     @app.route('/users/<int:id>/followers', methods =["POST"])
+    @requires_auth("follow:profile")
     def add_follower(id):
 
         data = request.get_json()
@@ -308,6 +321,7 @@ def Resource_Users(app):
 def Resource_Reports(app):
     # Admin Role
     @app.route('/reports', methods= ["GET"])
+    @requires_auth("get:report")
     def get_all_reports():
         # get all reports for the admin
         reports = Report.query.all()
@@ -319,6 +333,7 @@ def Resource_Reports(app):
 
     # User only Role
     @app.route('/reports', methods= ["POST"])
+    @requires_auth("add:report")
     def add_report_question():
 
         data = request.get_json()
@@ -353,6 +368,7 @@ def Resource_Reports(app):
 
     # Admin Role
     @app.route('/reports/<int:id>', methods= ["GET"])
+    @requires_auth("get:report")
     def get_report(id):
         report = Report.query.get(id)
         if not report:
@@ -365,6 +381,7 @@ def Resource_Reports(app):
 
     # Admin Role
     @app.route('/reports/<int:id>', methods= ["DELETE"])
+    @requires_auth("delete:report")
     def delete_report(id):
         report = Report.query.get(id)
         if not report:
@@ -401,3 +418,12 @@ def Error_Handling(app):
             "error" : 422,
             "message" : "Error Un Proccessable"
         }) , 422
+
+    @app.errorhandler(AuthError)
+    def handle_auth_error(error):
+        return jsonify({
+            "success": False,
+            "error": error.status_code,
+            'message': error.error
+        }), 401
+
