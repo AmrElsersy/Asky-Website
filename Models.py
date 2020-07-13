@@ -120,7 +120,7 @@ class Report(db.Model, AbstractTable):
     def setID(self,id):
         self.id = id
 
-
+# map table that maps the IDs from Auth0 to another IDs that is used to attatch questions to users
 class UserAuthID_ID(db.Model, AbstractTable):
     __tablename__ = "map"
     id = Column(Integer, primary_key= True)

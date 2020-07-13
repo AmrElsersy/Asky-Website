@@ -46,6 +46,7 @@ class AskyTestCase(unittest.TestCase):
         question.setID(100)
         question.insert()
         Asked(user_id = 28, question_id = 100).insert()
+
     def testFail_delete_question(self):
         res = self.client().delete('/questions/1000', headers = self.admin)
         data = json.loads(res.data)
@@ -83,6 +84,7 @@ class AskyTestCase(unittest.TestCase):
 
         Question.query.get(data['id']).delete()
         QuestionReplys.query.filter(QuestionReplys.reply_id == data['id']).all()[0].delete()
+        Asked.query.filter(Asked.user_id == 28, Asked.question_id == data['id']).delete()
 
     def testFail_add_reply(self):
         res = self.client().post('/questions/100/replys', json = {
@@ -274,6 +276,36 @@ class AskyTestCase(unittest.TestCase):
         data = json.loads(res.data)
         self.assertEqual(res.status_code,404)
 
+    # =========== Roles =================
+    # ======= Admin Role ================
+    def test_role_admin_1(self):
+        res = self.client().get('/reports/100', headers = self.user)
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code,401)
+    
+    def test_role_admin_2(self):
+        res = self.client().delete('/questions/100', headers = self.user)
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code,401)
+
+    # ======== User Rule =================
+    def test_role_user_1(self):
+        res = self.client().post('/reports', json = {
+            "user_id" : 101,
+            "question_id" : 28
+        }, headers = self.admin )
+
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code,401)
+
+    def test_role_user_2(self):
+        res = self.client().patch('/questions/100', json={
+            "answer" : "test_answer",
+            "reacts" : 3
+        }, headers = self.admin)
+
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code,401)
 
 # Make the tests conveniently executable
 if __name__ == "__main__":

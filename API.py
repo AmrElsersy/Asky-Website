@@ -343,13 +343,11 @@ def Resource_Reports(app):
             
             rr = Report.query.filter(Report.user_id == data["user_id"] and Report.question_id == data["question_id"]).all()
             if len(rr) == 1:
-                print('xxxxxxxxxxxx')
                 return jsonify({
                     "success" : True,
                     "report" : rr[0].format()
                 }), 200
 
-            print('yyyyyyyyyyyyyyyy')
             new_report = Report(
                 user_id = data["user_id"],
                 question_id = data["question_id"]

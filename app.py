@@ -27,6 +27,14 @@ def create_app():
     Resource_Users(app)
     Resource_Reports(app)
 
+    @app.route('/')
+    def home():
+        print(request.headers.get("Authorization",None))
+        users = User.query.all()
+        return jsonify({
+            "users" : [user.format() for user in users]
+        })
+
     return app
 
 
