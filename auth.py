@@ -4,7 +4,6 @@ from functools import wraps
 from jose import jwt
 from urllib.request import urlopen
 
-
 AUTH0_DOMAIN = 'sersy.auth0.com'
 ALGORITHMS = ['RS256']
 API_AUDIENCE = 'Asky'
@@ -18,7 +17,6 @@ class AuthError(Exception):
 
 def get_token_auth_header():
     auth = request.headers.get("Authorization",None)
-    print("barieer header === ", auth)
     if not auth :
         raise AuthError({
             'code': 'not found authorization',
@@ -33,6 +31,7 @@ def get_token_auth_header():
     if n == 2 :
         bearer = auth_list[0]
         if bearer.lower() != "bearer":
+            print("not barear")
             raise AuthError({
                 'code': 'invalid_header',
                 'description': 'Authorization header dosn`t have Bearer'
@@ -109,7 +108,6 @@ def verify_decode_jwt(token):
                 audience=API_AUDIENCE,
                 issuer='https://' + AUTH0_DOMAIN + '/'
             )
-            print("payload === ", payload)
 
             return payload
 
@@ -135,6 +133,18 @@ def verify_decode_jwt(token):
             }, 400)
 
 
+def login(payload):
+
+        from Models import UserAuthID_ID
+
+        Auth_id = payload['sub']
+        authID_to_ID = UserAuthID_ID.query.filter(UserAuthID_ID.auth_id == Auth_id).all()
+
+        if not len(authID_to_ID):
+            new_user = UserAuthID_ID(auth_id = Auth_id)
+            new_user.insert()
+
+
 
 def requires_auth(permission=''):
     def requires_auth_decorator(f):
@@ -147,6 +157,9 @@ def requires_auth(permission=''):
             # check the permission if only required
             if permission != '':
                 check_permissions(permission, payload)
+
+            login(payload)
+
             return f(payload, *args, **kwargs)
 
         return wrapper

@@ -83,8 +83,8 @@ def Resource_Questions(app):
             abort(400)
 
     ####  Replys
-    @requires_auth("answer:question")
     @app.route('/questions/<int:id>/replys',  methods=["POST"])
+    @requires_auth("answer:question")
     def add_reply(jwt, id):
         data = request.get_json()
 
@@ -325,7 +325,6 @@ def Resource_Reports(app):
     def get_all_reports(jwt):
         # get all reports for the admin
         reports = Report.query.all()
-
         return jsonify({
             "success" : True,
             "reports" : [report.format() for report in reports]

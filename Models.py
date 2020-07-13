@@ -119,3 +119,9 @@ class Report(db.Model, AbstractTable):
 
     def setID(self,id):
         self.id = id
+
+
+class UserAuthID_ID(db.Model, AbstractTable):
+    __tablename__ = "map"
+    id = Column(Integer, primary_key= True)
+    auth_id = Column(String)
