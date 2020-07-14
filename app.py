@@ -12,6 +12,7 @@ from API import Resource_Questions, Resource_Users, Resource_Reports, Error_Hand
 def create_app():
     
     app = Flask(__name__)
+    migrate = Migrate(app, db)
     setup_db(app)
 
     CORS(app)
