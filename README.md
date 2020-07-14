@@ -103,7 +103,7 @@ eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IloxaGFneUZaSkVySGVMbnpLcHdmQiJ9.eyJ
 ( User & Admin )
 * GET /questions/<id>
 - get the data of a specific question
-- Request : GET askysers.herokuapp.com/questions/26
+- Request : GET askysers.herokuapp.com/questions/1
 - Request Arguments : None
 - Response :
 ``` 
@@ -119,10 +119,13 @@ eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IloxaGFneUZaSkVySGVMbnpLcHdmQiJ9.eyJ
 }
 ```
 
+
+
+=================================== 
 ( Admin )
 * DELETE /questions/<id>
 - get the data of a specific question
-- Request : DELETE askysers.herokuapp.com:5000/questions/33
+- Request : DELETE askysers.herokuapp.com:5000/questions/2
 - Response :
 ``` 
 {
@@ -130,14 +133,17 @@ eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IloxaGFneUZaSkVySGVMbnpLcHdmQiJ9.eyJ
 }
 ```
 
+
+
+=================================== 
 ( User )
 * PATCH /questions/<id>
 - get the data of a specific question
-- Request : PATCH askysers.herokuapp.com:5000/questions/26
+- Request : PATCH askysers.herokuapp.com:5000/questions/1
 ```
 {
 	"answer" : "answer to question",
-	"reacts" : 3
+	"reacts" : 4
 }
 ```
 - Response :
@@ -149,16 +155,18 @@ eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IloxaGFneUZaSkVySGVMbnpLcHdmQiJ9.eyJ
         "content": "how are you sersy? ",
         "id": 26,
         "is_answered": false,
-        "reacts": 3,
+        "reacts": 4,
         "user_id": 25
     }
 }
 ```
 
+
+=================================== 
 ( User & Admin )
 * GET /questions/<int:id>/replys
 - get the replys of the question ( reply is another question but is a child of queistion with <id>)
-- Request : GET askysers.herokuapp.com/questions/100/replys
+- Request : GET askysers.herokuapp.com/questions/4/replys
 - Request Arguments : 
 - Response :
 ``` 
@@ -167,7 +175,7 @@ eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IloxaGFneUZaSkVySGVMbnpLcHdmQiJ9.eyJ
         {
             "answer": null,
             "content": "test_reply",
-            "id": 42,
+            "id": 5,
             "is_answered": false,
             "reacts": 0,
             "user_id": 25
@@ -177,10 +185,12 @@ eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IloxaGFneUZaSkVySGVMbnpLcHdmQiJ9.eyJ
 }
 ```
 
+
+=================================== 
 ( User )
 * POST /questions/<int:id>/replys
 - add another question as a reply (continue asking) to that question (like in ask-fm)
-- Request : POST askysers.herokuapp.com/questions/100/replys
+- Request : POST askysers.herokuapp.com/questions/4/replys
 - Request Arguments : reply:string contains the question reply, asker_id is the id of the user that is asking
 ```
 {
@@ -202,7 +212,7 @@ eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IloxaGFneUZaSkVySGVMbnpLcHdmQiJ9.eyJ
 ( User & Admin )
 * GET /users/<int:id>
 - get the user info like name, picture
-- Request : GET 127.0.0.1:5000/users/28
+- Request : GET askysers.herokuapp.com/users/28
 - Request Arguments :  None
 - Response :
 ``` 
@@ -217,6 +227,8 @@ eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IloxaGFneUZaSkVySGVMbnpLcHdmQiJ9.eyJ
 }
 ```
 
+
+=================================== 
 ( User & Admin )
 * PATCH /users/<int:id>
 - get the user info like name, picture
@@ -240,6 +252,8 @@ eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IloxaGFneUZaSkVySGVMbnpLcHdmQiJ9.eyJ
 }
 ```
 
+
+=================================== 
 ( User)
 * GET users/<int:id>/asked_questions
 - get the questions that the user asked
@@ -261,6 +275,7 @@ eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IloxaGFneUZaSkVySGVMbnpLcHdmQiJ9.eyJ
 
 
 
+=================================== 
 ( User & Admin )
 * GET /users/<int:id>/questions
 - get the questions that asked to the user
@@ -299,10 +314,9 @@ eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IloxaGFneUZaSkVySGVMbnpLcHdmQiJ9.eyJ
             "id": 100,
             "is_answered": true,
             "reacts": 3,
-            "user_id": 25
+         "user_id": 25
         },
         {
-            "answer": null,
             "content": "is that project excellent or very goog ?",
             "id": 28,
             "is_answered": false,
@@ -315,17 +329,18 @@ eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IloxaGFneUZaSkVySGVMbnpLcHdmQiJ9.eyJ
 ```
 
 
+=================================== 
 ( User )
 * POST /users/<int:id>/questions
 - ask question to the user
-- Request : POST 127.0.0.1:5000/users/28/questions
+- Request : POST askysers.herokuapp.com/users/28/questions
+- Request body: id is the asker id
 ``` 
-{
 	"id": 28,
 	"question": "question body ???"
 }
 ```
-- Response : id : 300 is a random number represents the id is created in db and attatched to that question
+- Response : id : the new question id
 ``` 
 {
 	"success" : True,
@@ -333,6 +348,7 @@ eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IloxaGFneUZaSkVySGVMbnpLcHdmQiJ9.eyJ
 }
 ```
 
+=================================== 
 ( User & Admin )
 * GET /users/<id>/followers
 - get the followers that the user with <id> follows
@@ -349,6 +365,7 @@ eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IloxaGFneUZaSkVySGVMbnpLcHdmQiJ9.eyJ
 }
 ```
 
+=================================== 
 ( User )
 * POST users/id/followers 
 - make user of id (specified in the url) to follow a user with id (specified in json body)
@@ -391,6 +408,7 @@ eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IloxaGFneUZaSkVySGVMbnpLcHdmQiJ9.eyJ
 }
 ```
 
+=================================== 
 ( User )
 * POST /reports 
 - report a bad question to the admin (only for user)
@@ -414,7 +432,7 @@ eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IloxaGFneUZaSkVySGVMbnpLcHdmQiJ9.eyJ
 ```
 
 
-
+=================================== 
 ( Admin )
 * GET /reports/<int:id>
 - return a specific report that get reported by users (only for admin)
@@ -432,6 +450,7 @@ eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IloxaGFneUZaSkVySGVMbnpLcHdmQiJ9.eyJ
 }
 ```
 
+=================================== 
 ( Admin )
 * DELETE /reports/<int:id>
 - Delete a report (only for admin)
