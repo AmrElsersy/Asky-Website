@@ -5,7 +5,6 @@ from sqlalchemy.ext.declarative import declarative_base
 from flask_migrate import Migrate
 
 Base = declarative_base()
-
 import json, os
 
 database_path = os.environ.get('DATABASE_URL')
@@ -17,8 +16,9 @@ def setup_db(app, database_path=database_path):
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.app = app
     db.init_app(app)
-#    migrate = Migrate(app, db)
     db.create_all()
+
+    migrate = Migrate(app, db)
 
 
 
