@@ -1,6 +1,8 @@
 # Asky Website
 #### Asky Project is a Question Based Website that allow people to ask each other questions and follow other users and report bad questions, like ask-fm
 
+it is only a backend
+
 ## User Story
 ### Asky Backend has 2 Roles User and Admin
 * User can ask question to other user
@@ -12,12 +14,58 @@
 * User can edit his profile
 * User can see who is he following to get their questions
 
-- ==========================================
+- =========================================
 
 * Admin can view all reports by all users
 * Admin can delete question 
 * Admin can delete the report after dealing with its question
 * Admin can view question's data
+
+
+## Topics
+- The Final Project of the Full stack Nanodegree
+- Database modeling using sqlalchemy (models.py)
+- REST API for CRUD using Flask (app.py)
+- Authentication & Authorization Role based using Auth0 (auth.py)
+- Deployment on Heroku
+- Unit testing using unittest (Test.py)
+- Enviroment variables encapsulation (Setup.sh)
+
+
+## Install
+```
+source setup.sh
+pip install -r requirements.txt
+```
+
+## Run the Server
+```
+source setup.py
+python3 app.py
+```
+
+## Run Testing
+```
+source setup.py
+python3 Test.py
+
+----------------------------------------------------------------------
+Ran 35 tests in 60.227s
+
+OK
+```
+
+### Enviroment variables
+- AUTH0_DOMAIN='sersy.auth0.com'
+- API_AUDIENCE='Asky'
+- ALGORITHMS='RS256'
+- ADMIN= ( Admin Token )
+- USER ( User Token )
+- DATABASE_URL='postgresql://postgres:1@localhost:5432/Asky'
+
+
+
+
 
 ## Getting Started
 * Base URL : this app can be run localy with base URL https://askysers.herokuapp.com/
