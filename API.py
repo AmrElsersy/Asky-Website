@@ -150,6 +150,20 @@ def Resource_Questions(app):
 
 # ============= User ================
 def Resource_Users(app):
+    @app.route('/users', methods = ["POST"])
+    def login():
+        data = request.get_json()
+
+        if "name" in data and "id" in data:
+            new_user = User(name = data['name'], id = data['id'])
+            new_user.insert()
+
+            return jsonify({
+                "id" : new_user.id
+            })
+        else:
+            abort(400)
+
     @app.route('/users/<int:id>',  methods=["GET"])
     @requires_auth("get:user_info")
     def get_user(jwt, id):
