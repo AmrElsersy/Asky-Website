@@ -111,7 +111,7 @@ Pillow==5.1.0
 pluggy==0.13.1
 post==0.0.0
 protobuf==3.6.1
-psutil==5.4.2
+psutil==5.6.6
 psycopg2==2.8.5
 psycopg2-binary==2.8.5
 py==1.8.2
