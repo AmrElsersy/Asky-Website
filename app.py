@@ -7,13 +7,14 @@ import json
 from models import *
 from auth import *
 from API import Resource_Questions, Resource_Users, Resource_Reports, Error_Handling
+from flask_migrate import Migrate
 
 
 def create_app():
     
     app = Flask(__name__)
-    migrate = Migrate(app, db)
     setup_db(app)
+    migrate = Migrate(app, db)
 
     CORS(app)
 
