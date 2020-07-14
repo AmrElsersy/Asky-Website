@@ -4,10 +4,9 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
 
-import json
+import json, os
 
-database_name = "Asky"
-database_path = "postgresql://{}:{}@{}/{}".format('postgres', '1','localhost:5432', database_name)
+database_path = os.environ.get('DATABASE_URL')
 
 db = SQLAlchemy()
 
