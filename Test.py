@@ -7,7 +7,7 @@ from flask import jsonify
 
 from app import *
 from API import *
-from Models import *
+from models import *
 
 admin_token = os.environ.get('ADMIN')
 user_token = os.environ.get('USER')

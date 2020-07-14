@@ -1,4 +1,4 @@
-from Models import *
+from models import *
 from auth import *
 from flask import Flask, request, abort, jsonify
 

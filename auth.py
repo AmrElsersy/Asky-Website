@@ -73,7 +73,7 @@ def check_permissions(permission, payload):
 
 def verify_decode_jwt(token):
     # GET THE PUBLIC KEY FROM AUTH0
-    jsonurl = urlopen(f'https://{AUTH0_DOMAIN}/.well-known/jwks.json')
+    jsonurl = urlopen('https://'+AUTH0_DOMAIN+'/.well-known/jwks.json')
     jwks = json.loads(jsonurl.read())
     
     # GET THE DATA IN THE HEADER
@@ -135,7 +135,7 @@ def verify_decode_jwt(token):
 
 def login(payload):
 
-        from Models import UserAuthID_ID
+        from models import UserAuthID_ID
 
         Auth_id = payload['sub']
         authID_to_ID = UserAuthID_ID.query.filter(UserAuthID_ID.auth_id == Auth_id).all()

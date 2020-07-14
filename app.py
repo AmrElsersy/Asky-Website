@@ -4,7 +4,7 @@ from flask_cors import CORS
 import os
 import random
 import json
-from Models import *
+from models import *
 from auth import *
 from API import Resource_Questions, Resource_Users, Resource_Reports, Error_Handling
 
