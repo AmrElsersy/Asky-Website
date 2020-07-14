@@ -253,7 +253,7 @@
 ```
 
 
-* GET /users/<int:id>/followers
+* GET /users/<id>/followers
 - get the followers that the user with <id> follows
 - Request : GET 127.0.0.1:5000/users/28/followers
 - Response :
