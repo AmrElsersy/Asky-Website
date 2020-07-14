@@ -1,7 +1,7 @@
 import json
 from flask import request, _request_ctx_stack
 from functools import wraps
-import jwt
+from jose import jwt
 from urllib.request import urlopen
 #from urllib2 import urlopen
 import os
