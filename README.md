@@ -3,8 +3,6 @@
 
 it is only a backend
 
-#### https://askysers.herokuapp.com/
-
 ## User Story
 ### Asky Backend has 2 Roles User and Admin
 * User can ask question to other user
@@ -22,6 +20,10 @@ it is only a backend
 * Admin can delete question 
 * Admin can delete the report after dealing with its question
 * Admin can view question's data
+
+## Database Design
+
+![Screenshot from 2020-07-17 02-35-19](https://user-images.githubusercontent.com/35613645/87735655-7189b380-c7d6-11ea-9f37-51525bfdf77d.png)
 
 
 ## Topics
